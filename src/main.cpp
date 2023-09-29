@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../include/glad/glad.h"
 #include <GLFW/glfw3.h>
+#include <cmath>
 
 //Based on: https://www.youtube.com/watch?v=45MIykWJ-C4
 
@@ -33,9 +34,19 @@ int main()
 
     GLfloat verticies[]=
     {
-        -.3f, -.2f,
-        0.0f, 0.1f,
-        0.8f, 0.9f
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f,
+        -0.5f/2, -0.5f/2, 0.0f,
+        0.5f/2, -0.5f/2, 0.0f,
+        0.0f/2, 0.5f/2, 0.0f
+    };
+
+    GLuint indicies[] =
+    {
+        0,3,1,
+        1,4,2,
+        2,5,0
     };
 
     window = glfwCreateWindow(800, 800, "Beautiful window", NULL, NULL);
@@ -78,10 +89,12 @@ int main()
     //We should only send big amount of data from the CPU to the GPU
     //So we need big bags (or buffers)
     GLuint VAO,VBO; //Vertex Array Object (?) /Vertex Buffer Object ----- these could be arrays
+    GLuint EBO; //indicies buffer
 
     glGenVertexArrays(1, &VAO); //VAO must be generated before VBO  ----- if they are arrays this name makes sense
     //"There is no guarantee that the names form a contiguous set of integers" -- no guarantee of 1,2,3,4,5....
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -93,6 +106,9 @@ int main()
     //^^ this is to improve performance
     //Draw - modified, and will be drawn read --? copy--?
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
+
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 3*sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -100,6 +116,7 @@ int main()
     //especially said here that ordering matters
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
 
     glClearColor(0.25f, 0.82f, 0.83f, 1.0f); //default color in the color buffer
@@ -110,7 +127,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(shaderProgram);                //runs compiled shader program
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -119,6 +136,7 @@ int main()
     //Deleting stuff
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderProgram);
     glfwDestroyWindow(window);
     glfwTerminate();
