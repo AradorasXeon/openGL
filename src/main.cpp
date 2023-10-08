@@ -27,12 +27,12 @@ int main()
 
     GLfloat verticies[]=
     {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        -0.5f/2, -0.5f/2, 0.0f,
-        0.5f/2, -0.5f/2, 0.0f,
-        0.0f/2, 0.5f/2, 0.0f
+        -0.9f, -0.5f, 0.0f,         0.1f, 0.0f, 0.6f,
+        0.5f, -0.9f, 0.0f,          0.2f, 0.2f, 0.1f,
+        1.0f, 0.5f, 0.0f,           0.4f, 0.8f, 0.6f,
+        -0.5f/2, -0.5f/2, 0.0f,     0.7f, 0.9f, 0.2f,
+        0.5f/2, -0.5f/2, 0.0f,      0.8f, 0.4f, 0.3f,
+        0.0f/2, 0.5f/2, 0.0f,       0.2f, 0.2f, 0.9f
     };
 
     GLuint indicies[] =
@@ -67,20 +67,24 @@ int main()
     VAO1.Bind();
 
     VBO VBO1(verticies, sizeof(verticies));
-    EBO EBO1(indicies, sizeof(indicies));
+    EBO EBO1(indicies, sizeof(indicies));   //will be automaticaly (?) attached to VAO
 
-    VAO1.LinkVBO(VBO1, 0u);
+    VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
+    VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
     VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
 
+    GLuint uniID = glGetUniformLocation(shaderProgram.getID() , "scale"); //to get the location of "scale" from the default.vert
+
     while(!glfwWindowShouldClose(window))
     {
-        glClearColor(0.25f, 0.82f, 0.83f, 1.0f);
+        glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         shaderProgram.Activate();
+        glUniform1f(uniID, 0.5f); //can be used only after shader program is activated
         VAO1.Bind();
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0); //not glDrawArrays, so EBO is used
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

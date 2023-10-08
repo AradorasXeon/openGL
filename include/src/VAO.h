@@ -13,10 +13,8 @@ class VAO
     //Generates Vertex Array Object(s)
     VAO();
 
-    /// @brief Links the VBO to the VAO
-    /// @param VBO to be linked
-    /// @param layout of the vertex atrib
-    void LinkVBO(VBO VBO, GLuint layout);
+ 
+    void LinkAttrib(VBO VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
     /// @brief binds this VAO | makes this VAO the current one
     void Bind();
     /// @brief unbinds any VAO

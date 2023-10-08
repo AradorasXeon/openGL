@@ -18,6 +18,8 @@ class Shader
 {
     private:
     GLuint ID;
+    void compileErrors(unsigned int shader, const char* type);
+
     public:
     /// @brief creates the shader program from the vertex and frag files
     /// @param vertexFile path to vertex file
@@ -28,6 +30,9 @@ class Shader
     void Activate();
     /// @brief deletes the sahder program
     void Delete();
+    /// @brief 
+    /// @returns handle ID 
+    GLuint getID();
 };
 
 #endif
