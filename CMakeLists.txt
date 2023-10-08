@@ -10,8 +10,9 @@ set(INCLUDE_DIR "include")
 
 # Use a wildcard to gather all source files in the directory
 file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.c")
-file(GLOB INCLUDE_FILES "${INCLUDE_DIR}/*.h")
 
+# Recursively gather header files from subdirectories under 'include'
+file(GLOB_RECURSE INCLUDE_FILES "${INCLUDE_DIR}/*.h")
 
 # Create the executable and link it with the source files
 add_executable(my_opengl_begginer_project ${SOURCE_FILES} ${INCLUDE_FILES})
