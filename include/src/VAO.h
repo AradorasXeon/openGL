@@ -14,7 +14,7 @@ class VAO
     VAO();
 
  
-    void LinkAttrib(VBO VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
+    void LinkAttrib(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
     /// @brief binds this VAO | makes this VAO the current one
     void Bind();
     /// @brief unbinds any VAO
