@@ -9,10 +9,12 @@ out vec3 color;
 out vec2 texCoord;
 
 uniform mat4 camMatrix;
+uniform mat4 model; //not in video
+
 
 void main()
 {
-    gl_Position = camMatrix * vec4(aPos, 1.0f);
+    gl_Position = camMatrix * model * vec4(aPos, 1.0f); //modded
     color = aColor;
     texCoord = aTex;
 }
